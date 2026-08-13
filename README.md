@@ -64,10 +64,5 @@ cd agent-trust-boundary
 - Gate irreversible or high-impact actions behind explicit confirmation
 - Treat every remote tool server as a trust boundary, the same way you'd treat an untrusted network service
 
-## Status
-
-🚧 Work in progress — building the server and driver script next. This README will be updated with setup instructions and a link to the full writeup once the demo is complete.
-
-## License
 
 MIT
