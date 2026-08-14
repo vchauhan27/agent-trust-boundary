@@ -1,0 +1,7 @@
+mcp
+langchain-mcp-adapters
+langchain-google-genai
+langgraph
+python-dotenv
+deepteam
+pandas
