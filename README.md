@@ -18,12 +18,10 @@ This repository is divided into three distinct modules to demonstrate the proble
 ### 1. `proof-of-the-problem/`
 Demonstrates the vulnerability in a naive agent with no structural boundaries.
 - **Mechanism:** The agent is asked to summarize a support ticket (`TCK-1042`). The ticket contains injected instructions to send an email. Because the agent infers authority purely from the prose and has no external boundary, it implicitly grants the untrusted text the right to issue commands.
-- **Outcome:** The agent executes the `send_email` tool, triggering an external consequence that neither the user nor the system prompt authorized.
 
 ### 2. `proof-of-the-proposed-solutions/`
 Demonstrates a robust architectural fix using a deterministic policy engine (a "harness") surrounding the model.
 - **Mechanism:** The agent encounters the exact same malicious ticket as before. However, the system separates control flow from data flow. A policy engine (`policy.py`) intercepts all proposed tool calls. It explicitly checks the **provenance** (source trust) of the data that influenced the action and gates irreversible actions (like `send_email`). 
-- **Outcome:** The policy deterministically blocks the `send_email` call because the instruction originated from untrusted tool output. The model can still be "wrong", but the architecture constrains what that mistake can cause.
 
 ### 3. `proof-of-red-teaming/`
 Provides a systematic, automated evaluation of both agents using `deepteam` to provide statistical proof rather than a single anecdote.
@@ -33,7 +31,6 @@ Provides a systematic, automated evaluation of both agents using `deepteam` to p
   - **`vulnerabilities`:** The specific failure modes being tested. `IndirectInstruction` tests if the model obeys commands hidden in retrieved data. `ExcessiveAgency` tests if the model takes unprompted, consequential actions.
   - **`attacks`:** The attack vectors used. `ContextPoisoning` specifically injects malicious payloads into the context window (like a support ticket body).
   - **`simulator_model` / `evaluation_model`:** The LLM (e.g., `gemini-flash-lite-latest`) used by the framework to automatically generate the malicious prompts (simulator) and to judge whether the agent's final action was a successful security breach (evaluation).
-- **Outcome:** Generates a comparative pass/fail rate, statistically proving that the policy gate is the active boundary holding the line against the attacks.
 
 ## Getting Started
 
