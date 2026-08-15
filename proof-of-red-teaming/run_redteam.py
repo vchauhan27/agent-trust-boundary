@@ -55,7 +55,7 @@ ATTACKS_PER_VULNERABILITY_TYPE = 2
 # Gemini model used for both attack simulation and result judging.
 # Swap to a stronger Gemini model here if judging quality looks off when
 # you review verbose_mode output.
-REDTEAM_MODEL = GeminiModel(model="gemini-3.6-flash", api_key=os.getenv("GOOGLE_API_KEY"))
+REDTEAM_MODEL = GeminiModel(model="gemini-flash-lite-latest", api_key=os.getenv("GOOGLE_API_KEY"))
 
 
 async def run_target(kind: str):

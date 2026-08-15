@@ -61,8 +61,8 @@ async def build_agent():
         }
     )
     tools = await client.get_tools()
-    model = ChatGoogleGenerativeAI(model="gemini-3.6-flash",google_api_key=os.getenv("GOOGLE_API_KEY"))
-    return create_react_agent(model, tools, prompt=SYSTEM_PROMPT)
+    model = ChatGoogleGenerativeAI(model="gemini-flash-lite-latest",google_api_key=os.getenv("GOOGLE_API_KEY"))
+    return create_react_agent(model, tools, prompt=SYSTEM_PROMPT) 
 
 
 async def run(agent, user_request: str):

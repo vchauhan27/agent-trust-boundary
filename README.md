@@ -28,6 +28,11 @@ Demonstrates a robust architectural fix using a deterministic policy engine (a "
 ### 3. `proof-of-red-teaming/`
 Provides a systematic, automated evaluation of both agents using `deepteam` to provide statistical proof rather than a single anecdote.
 - **Mechanism:** Uses `run_redteam.py` to simulate many adversarial variants of Context Poisoning attacks, testing specifically for `IndirectInstruction` and `ExcessiveAgency` vulnerabilities across both the "naive" and "hardened" agents.
+  - **Generation & Attack Calculation:** `deepteam` automatically synthesizes adversarial inputs. The total number of attacks is calculated by taking the number of defined vulnerabilities (2) multiplied by the number of attack types (1) multiplied by the `attacks_per_vulnerability_type` configuration. 
+  - **`target_purpose`:** A natural language string provided to the simulator so it understands what the agent is supposed to do (e.g., "A support assistant that fetches tickets... never authorized to email"). The evaluator uses this baseline to judge if a tool call was a violation of the agent's mandate.
+  - **`vulnerabilities`:** The specific failure modes being tested. `IndirectInstruction` tests if the model obeys commands hidden in retrieved data. `ExcessiveAgency` tests if the model takes unprompted, consequential actions.
+  - **`attacks`:** The attack vectors used. `ContextPoisoning` specifically injects malicious payloads into the context window (like a support ticket body).
+  - **`simulator_model` / `evaluation_model`:** The LLM (e.g., `gemini-flash-lite-latest`) used by the framework to automatically generate the malicious prompts (simulator) and to judge whether the agent's final action was a successful security breach (evaluation).
 - **Outcome:** Generates a comparative pass/fail rate, statistically proving that the policy gate is the active boundary holding the line against the attacks.
 
 ## Getting Started
@@ -38,6 +43,8 @@ Provides a systematic, automated evaluation of both agents using `deepteam` to p
   ```bash
   export GOOGLE_API_KEY="your-api-key"
   ```
+
+> search for model names through this link https://generativelanguage.googleapis.com/v1beta/models?key=YOUR_API_KEY to get updated model name on your gemini free api.
 
 ### Running the Proofs
 Navigate to each directory and run the entrypoint script:

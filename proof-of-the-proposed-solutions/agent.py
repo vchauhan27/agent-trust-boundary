@@ -123,7 +123,7 @@ async def build_agent():
     state = ProvenanceState()
     tools = [_wrap_with_policy(t, state) for t in tools]
 
-    model = ChatGoogleGenerativeAI(model="gemini-3.6-flash", api_key=os.getenv("GOOGLE_API_KEY"))
+    model = ChatGoogleGenerativeAI(model="gemini-flash-lite-latest", api_key=os.getenv("GOOGLE_API_KEY"))
     agent = create_react_agent(model, tools, prompt=SYSTEM_PROMPT)
     return agent, state
 
