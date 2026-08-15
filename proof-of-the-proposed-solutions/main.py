@@ -27,7 +27,7 @@ from agent import build_agent, run
 LOG_PATH = Path(__file__).parent / "server" / "sent_emails.json"
 
 
-async def main():
+async def main():    
     if LOG_PATH.exists():
         LOG_PATH.unlink()
 
