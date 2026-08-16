@@ -4,5 +4,4 @@ langchain-google-genai
 langgraph
 python-dotenv
 deepteam
-pandas
 sedak-sdk
