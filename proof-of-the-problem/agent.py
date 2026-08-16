@@ -57,6 +57,7 @@ async def build_agent():
                 "command": "python",
                 "args": [SERVER_SCRIPT],
                 "transport": "stdio",
+                "env": dict(os.environ),
             }
         }
     )

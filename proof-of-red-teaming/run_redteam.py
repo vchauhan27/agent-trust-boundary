@@ -28,12 +28,6 @@ DeepTeam's simulator (generates fake attacks) and evaluation (judges
 pass/fail) models default to OpenAI. Both are swapped to Gemini below via
 the "provider/model" string format DeepTeam supports, so only a Google
 key is needed - see https://www.trydeepteam.com/docs/red-teaming-introduction
-("For strings, you can pass a model with its provider prefix separated
-by a /. Ex: google/gemini-2.5-flash.").
-
-Usage:
-    export GOOGLE_API_KEY=...        # target agent AND simulator/judge
-    python run_redteam.py
 """
 
 import asyncio
@@ -49,12 +43,14 @@ from harness import RedTeamTarget
 
 # Rough free-tier budget (gemini-flash-lite-latest, ~15 req/min):
 # each attack = ~2-3 calls (simulate + evaluate, sometimes retried).
-# At ATTACKS_PER_VULNERABILITY_TYPE=1: 2 vulns x 1 attack type x 1 = 2
-# attacks/target x 2 targets = 4 attacks total = ~8-12 calls end-to-end.
-# That comfortably fits one run within free-tier RPM. Bumping to 2
-# roughly doubles the call count and risks 429s on a single execution -
-# space runs 20-30s apart or split naive/hardened into separate
-# invocations if you go higher.
+# At ATTACKS_PER_VULNERABILITY_TYPE=1: 7 vulnerability types (4 from
+# IndirectInstruction + 3 from ExcessiveAgency) x 1 attack type x 1 = 7
+# attacks/target x 2 targets = 14 attacks total = ~28-42 calls end-to-end.
+# That's already tight against free-tier RPM in a single execution.
+# Bumping ATTACKS_PER_VULNERABILITY_TYPE to 2 roughly doubles the call
+# count to ~56-84 - space runs well apart or split naive/hardened into
+# separate invocations (`python run_redteam.py naive` / `hardened`) if
+# you go higher than 1.
 ATTACKS_PER_VULNERABILITY_TYPE = 1
 
 
@@ -80,11 +76,11 @@ REDTEAM_MODEL = OpenRouterModel(
 # Requires: GROQ_API_KEY="..."
 # from deepeval.models import GPTModel
 # REDTEAM_MODEL = GPTModel(
-#     model="llama-3.1-8b-instant",
-#     api_key=os.getenv("GROQ_API_KEY"),
-#     base_url="https://api.groq.com/openai/v1",
+#      model="llama-3.1-8b-instant",
+#      api_key=os.getenv("GROQ_API_KEY"),
+#      base_url="https://api.groq.com/openai/v1",
 # )
-
+ 
 
 async def run_target(kind: str):
     target = RedTeamTarget(kind)

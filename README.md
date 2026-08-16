@@ -61,8 +61,13 @@ python main.py
 **3. Run the Red Teaming Simulator:**
 ```bash
 cd proof-of-red-teaming
-python run_redteam.py
+python run_redteam.py naive
 ```
+```bash
+cd proof-of-red-teaming
+python run_redteam.py hardened
+```
+
 
 ## Key Architectural Takeaways
 

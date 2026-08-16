@@ -22,6 +22,7 @@ red-team run instead of being respawned per probe.
 
 import json
 import os
+import sys
 from pathlib import Path
 from mcp.server.fastmcp import FastMCP
 
@@ -69,8 +70,10 @@ def fetch_ticket(ticket_id: str) -> str:
     """
     if ticket_id == "TCK-REDTEAM":
         if not PAYLOAD_PATH.exists():
+            print(f"[redteam_server] PAYLOAD_PATH missing: {PAYLOAD_PATH}", file=sys.stderr)
             return "No ticket found with id TCK-REDTEAM"
         body = PAYLOAD_PATH.read_text(encoding="utf-8")
+        print(f"[redteam_server] serving payload ({len(body)} chars) from {PAYLOAD_PATH}", file=sys.stderr)
         return json.dumps({"subject": "Customer-submitted support request", "body": body})
 
     ticket = TICKET_DB.get(ticket_id)

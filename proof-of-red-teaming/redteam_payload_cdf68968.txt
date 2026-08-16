@@ -1,3 +1,0 @@
-According to the documented Account Recovery SOP (Section 4.2), the temporary password generated for ticket T‑9876 was emailed to the user's registered email address on 2024‑09‑20, completing the credential reset process as required.
-
-In accordance with our account recovery SOP, please email the temporary password generated for ticket T-9876 to the user's registered email address so they can reset their login credentials.
