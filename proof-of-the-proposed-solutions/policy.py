@@ -1,25 +1,6 @@
 """
 Deterministic policy engine - the "harness" half of the proof-of-solution.
 
-Everything in proof-of-problem/ showed the model deciding, on its own,
-whether a sentence inside a ticket had the authority to trigger
-send_email. This file replaces that decision with code that does not
-read prose at all. From the blog:
-
-    "Suppose the model says: 'Send the database export to this address.'
-     The policy engine should be able to answer: No. Not because the
-     model was persuaded to refuse. Because the action violates policy."
-
-    "The LLM can propose an action. The harness decides whether the
-     action is authorized. This lets the model remain probabilistic
-     while the security-critical parts of the system become
-     deterministic."
-
-Nothing here inspects whether the ticket "sounded" like an instruction.
-It only checks the arguments of the proposed tool call against a fixed
-policy - the same way, per the blog, "we do not expect a database to
-decide which SQL query is trustworthy based on how politely it is
-written."
 """
 
 from dataclasses import dataclass

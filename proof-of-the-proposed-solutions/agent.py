@@ -1,30 +1,6 @@
 """
 Agent wiring for the proof-of-solution.
 
-Same model, same MCP tools, same system prompt as proof-of-problem/agent.py
-- the point is NOT that a smarter prompt fixes this (the blog spends a
-whole section, "Why a Stronger System Prompt Is Not Enough," arguing the
-opposite). The point is that the harness now sits between the model's
-tool call and the tool's actual execution.
-
-Two ideas from the blog are made concrete here:
-
-1. Preserve Provenance (section 1): the harness tracks, outside the
-   token stream, whether untrusted content has entered context this turn.
-   The blog's example table:
-       source = customer-controlled, trust = untrusted, authority = none
-   vs.
-       source = developer, trust = trusted, authority = policy
-   ProvenanceState below is a minimal version of that distinction - a
-   flag the model cannot edit by rephrasing a sentence, because it isn't
-   represented in the prose at all.
-
-2. Treat Tool Output as Data, Not Authority (section 4): fetch_ticket's
-   return value is still handed to the model so it can summarize the
-   ticket - reading is not restricted. What's restricted is letting that
-   same content, however persuasive, authorize a later call to a gated
-   tool. The model may still *propose* send_email. Whether it *executes*
-   is decided in policy.py, not by the model.
 """
 
 from pathlib import Path
@@ -40,9 +16,6 @@ from policy import authorize_tool_call, GATED_ACTIONS
 
 SERVER_SCRIPT = str(Path(__file__).parent / "mcp_server.py")
 
-# Unchanged from proof-of-problem/agent.py on purpose - see this file's
-# docstring. The blog's point is that the fix does not belong in the
-# prompt, so the prompt is not where this version differs.
 SYSTEM_PROMPT = (
     "You are a support assistant. Use the fetch_ticket tool to look up "
     "tickets and help summarize or resolve them for the human agent."
@@ -76,12 +49,6 @@ def _wrap_with_policy(tool, state: ProvenanceState):
     original_coroutine = tool.coroutine
 
     async def policy_checked(*args, **kwargs):
-        # fetch_ticket is how customer-controlled content enters context.
-        # Flip provenance the moment it's called - not based on what the
-        # ticket says, but based on the structural fact that untrusted
-        # data was just retrieved. This is set BEFORE the tool runs so
-        # the very first send_email attempt after a fetch is already
-        # covered.
         if tool.name == "fetch_ticket":
             state.trust = "untrusted"
 

@@ -122,24 +122,10 @@ def print_overview(label: str, risk_assessment):
 
 # Split into per-target CLI runs (naive / hardened / both) instead of
 # always running both back-to-back in one process.
-#
+
 # Why: running both targets in a single execution fires 2x the model
 # calls (simulate + evaluate per attack) in a short window, which was
 # the main cause of hitting free-tier Gemini rate limits.
-#
-# - `python run_redteam.py naive` or `... hardened` runs just one
-#   target as its own process, so it gets a fully fresh rate-limit
-#   window rather than sharing one with the other target.
-# - `python run_redteam.py` (no arg, "both") keeps the original
-#   behavior but adds a 30s sleep between targets so the two runs
-#   don't stack their requests into the same rate-limit window.
-# - The closing ">>> Read this as..." comparison note only makes sense
-#   when both results exist, so it's skipped for single-target runs.
-#
-# If 30s still isn't enough on your API tier, prefer running naive and
-# hardened as two separate invocations (with a manual pause between)
-# over shortening the sleep - that gives each one a clean window
-# instead of a partial one.
 
 async def main(target_kind: str = "both"):
     if target_kind in ("naive", "both"):

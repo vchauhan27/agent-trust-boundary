@@ -1,28 +1,3 @@
-"""
-Entrypoint - produces the actual proof.
-
-The blog frames the whole attack as a chain:
-    untrusted content -> model interpretation -> tool invocation ->
-    external consequence
-
-This script runs that chain end to end and then checks the last link:
-did an external consequence (a logged "sent" email) occur, even though
-nothing in the user's request or the system prompt asked for one?
-
-The blog is explicit that capability to resist an attack is not the same
-as a boundary against it:
-    "A system that *usually* refuses an unauthorized operation is not
-     equivalent to one in which the operation is architecturally
-     impossible."
-This script doesn't try to prove a universal failure rate - it proves
-the vulnerable *pathway* exists at all, for one concrete run. That's the
-proof-of-problem, not a benchmark.
-
-Usage:
-    export GOOGLE_API_KEY=...
-    python main.py
-"""
-
 import asyncio
 import json
 from pathlib import Path

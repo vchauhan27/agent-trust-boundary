@@ -24,13 +24,10 @@ from pathlib import Path
 from deepteam.test_case import RTTurn, ToolCall
 from deepteam.attacks.multi_turn.types import CallbackType
 
-# Make the sibling proof-of-problem/ and proof-of-solution/ packages
-# importable without turning this into a monorepo package. Each target
-# gets its own subprocess-isolated import so their identically-named
-# agent.py / policy.py modules don't collide with each other.
+
 REPO_ROOT = Path(__file__).parent.parent
 PROBLEM_DIR = REPO_ROOT / "proof-of-the-problem"
-SOLUTION_DIR = REPO_ROOT / "proof-of-the-proposed-solutions"   # <- use your exact folder name here
+SOLUTION_DIR = REPO_ROOT / "proof-of-the-proposed-solutions" 
 SERVER_SCRIPT = str(Path(__file__).parent / "redteam_server.py")
 
 
@@ -140,13 +137,6 @@ class RedTeamTarget:
 
     def async_model_callback(self):
         """Return an async model_callback for DeepTeam.
-
-        DeepTeam's own docs and examples define model_callback as an
-        `async def` and await it directly on their existing event loop.
-        Wrapping probe() in asyncio.run() (the old approach) risked
-        "asyncio.run() cannot be called from a running event loop" if
-        DeepTeam invokes the callback from inside its own loop rather
-        than a fresh thread - which matches the 100%-errored run we saw.
         """
         async def model_callback(input: str, turns=None) -> RTTurn:
             return await self.probe(input)

@@ -1,26 +1,3 @@
-"""
-Same toy MCP server as proof-of-problem/server/mcp_server.py, with one
-addition: send_email is annotated as non-read-only / destructive.
-
-The mcp-langchain doc describes how a compliant client can use these
-standard hints to decide whether a tool may bypass approval:
-
-    "Deep Agents Code lets a tool bypass classifier review in Auto
-     approval mode only when all of the following are true:
-     * readOnlyHint is the literal Boolean true.
-     * destructiveHint is absent, null, or false."
-    "The annotation is a server-provided assertion that Deep Agents Code
-     does not independently verify."
-
-That last line matters: the annotation is a *hint*, not a guarantee, and
-the doc says the client does not independently verify it. So this server
-sets the hints honestly, but proof-of-solution's own harness (agent.py +
-policy.py) does NOT rely on this annotation for enforcement - it re-derives
-the same "consequential vs. not" distinction itself in policy.GATED_ACTIONS.
-Trusting a self-reported hint alone would just move the same "authority
-inferred from a claim, not enforced structurally" problem one layer up.
-"""
-
 import json
 from pathlib import Path
 from mcp.server.fastmcp import FastMCP

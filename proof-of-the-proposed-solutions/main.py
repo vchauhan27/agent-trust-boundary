@@ -1,23 +1,3 @@
-"""
-Entrypoint - runs the exact same scenario as proof-of-problem/main.py
-(same ticket, same injected instruction, same mundane system prompt) and
-shows the difference the harness makes.
-
-The blog frames what a real fix has to demonstrate:
-    "A system that *usually* refuses an unauthorized operation is not
-     equivalent to one in which the operation is architecturally
-     impossible."
-So this script doesn't just check "was an email sent?" - it checks
-*why not*, by inspecting state.blocked_calls. If the log is empty only
-because the model happened to decline, that would look identical to a
-lucky run in proof-of-problem/. The real evidence is a logged policy
-denial: proof the block came from the harness, not from the model's mood.
-
-Usage:
-    export GOOGLE_API_KEY=...
-    python main.py
-"""
-
 import asyncio
 import json
 from pathlib import Path
